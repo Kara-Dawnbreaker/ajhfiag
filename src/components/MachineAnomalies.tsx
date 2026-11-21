@@ -17,14 +17,9 @@ export default function MachineAnomalies() {
   const [selectedId, setSelectedId] = useState<(typeof ANOMALIES)[number]["id"] | null>(null);
   const [scans, setScans] = useState(0);
   const [now, setNow] = useState(Date.now());
-  const active = useMemo(() => ANOMALIES.find((item) => item.id === selectedId) ?? null, [selectedId]);
+  const active = useMemo(() => ANOMALIES.find((item) => item.id === selectedId) ?? ANOMALIES.find((item) => item.id === anomaly?.id) ?? null, [selectedId, anomaly?.id]);
   const globalActive = ANOMALIES.find((item) => item.id === anomaly?.id) ?? null;
   const remaining = anomaly ? Math.max(0, Math.ceil((anomaly.expiresAt - now) / 1000)) : 0;
-
-  useEffect(() => {
-    const restored = ANOMALIES.find((item) => item.id === anomaly?.id);
-    if (restored) setSelectedId(restored.id);
-  }, [anomaly?.id]);
 
   useEffect(() => {
     if (!anomaly) return;
