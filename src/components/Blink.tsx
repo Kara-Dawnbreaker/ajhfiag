@@ -32,13 +32,11 @@ export default function Blink() {
   const [point, setPoint] = useState<Point>({ x: 50, y: 50 });
   const [message, setMessage] = useState("TAP BEFORE THE CLOCK RUNS OUT");
   const [missed, setMissed] = useState(false);
-  const areaRef = useRef<HTMLDivElement | null>(null);
   const deadline = useRef(0);
   const raf = useRef(0);
   const activeRef = useRef(false);
   const scoreRef = useRef(0);
   const chainRef = useRef(0);
-  const windowRef = useRef(START_WINDOW);
   const pointRef = useRef<Point>(point);
 
   const finish = () => {
@@ -71,7 +69,6 @@ export default function Blink() {
     activeRef.current = true;
     scoreRef.current = 0;
     chainRef.current = 0;
-    windowRef.current = START_WINDOW;
     const next = randomPoint();
     pointRef.current = next;
     setPoint(next);
@@ -97,7 +94,6 @@ export default function Blink() {
     scoreRef.current += 1;
     chainRef.current += 1;
     const nextWindow = Math.max(MIN_WINDOW, START_WINDOW - Math.floor(chainRef.current / STEP_EVERY) * STEP_MS);
-    windowRef.current = nextWindow;
     deadline.current = now + nextWindow;
     const next = randomPoint(pointRef.current);
     pointRef.current = next;
@@ -140,7 +136,7 @@ export default function Blink() {
           <div className="mb-3 h-2 overflow-hidden bg-bone/10">
             <div className="h-full bg-amber transition-[width] duration-75" style={{ width: active ? `${pct}%` : "100%" }} />
           </div>
-          <div ref={areaRef} className="relative min-h-[360px] overflow-hidden border border-bone/15 bg-[#100e0d] sm:min-h-[440px]" style={{ backgroundImage: "radial-gradient(rgba(244,236,224,.10) 1px, transparent 1px)", backgroundSize: "22px 22px" }}>
+          <div className="relative min-h-[360px] overflow-hidden border border-bone/15 bg-[#100e0d] sm:min-h-[440px]" style={{ backgroundImage: "radial-gradient(rgba(244,236,224,.10) 1px, transparent 1px)", backgroundSize: "22px 22px" }}>
             {!active && (
               <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-ink/75 px-5 text-center backdrop-blur-[2px]">
                 <div className="font-display text-3xl font-extrabold sm:text-5xl">{missed ? "STREAK BROKEN" : "READY?"}</div>
