@@ -21,6 +21,9 @@ export default function Ledger() {
   const unlocked = useStore((s) => s.unlocked);
   const gallery = useStore((s) => s.gallery);
   const log = useStore((s) => s.log);
+  const plan = useStore((s) => s.plan);
+  const runs = useStore((s) => s.runs);
+  const boredom = useStore((s) => s.boredom);
   const awarded = useStore((s) => s.dareDayRecorded === s.daily.date);
   const { unpin, wipe } = useBoredom();
 
@@ -36,15 +39,19 @@ export default function Ledger() {
     exportRecord({
       exportedAt: new Date().toISOString(),
       stats,
+      boredom,
+      daily,
       badges: unlocked,
-      gallery: gallery.map((g) => ({ title: g.title, at: g.at })),
+      gallery,
+      plan,
+      arcadeRuns: runs,
       log,
     });
 
   return (
     <SectionShell
       id="ledger"
-      index="07"
+      index="05"
       kicker="your permanent record"
       title="The ledger remembers everything."
       blurb="Daily dares reset at midnight. Badges, gallery and stats don't. Every interaction on this page lands here, timestamped, like a machine that keeps score of your procrastination."
@@ -178,7 +185,7 @@ export default function Ledger() {
             <p className="py-10 text-center font-mono text-[0.62rem] leading-relaxed tracking-[0.14em] text-ash uppercase">
               nothing pinned yet.
               <br />
-              paint something in the flow field, then hit pin.
+              create something in the flow field, then hit pin.
             </p>
           ) : (
             <div className="mt-3 grid grid-cols-2 gap-3">
