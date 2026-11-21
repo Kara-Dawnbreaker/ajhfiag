@@ -40,8 +40,7 @@ export default function Footer() {
             </h2>
             <p className="mt-5 max-w-md text-[0.92rem] leading-relaxed text-ash">
               Everything here runs in your browser: the paintings are noise fields, the drums are
-              oscillators, the life organ is a cellular automaton that sings, and the oracle is three
-              arrays in a trench coat. Close the tab and it all evaporates, except your ledger, your
+              oscillators, the life organ is a cellular automaton that sings. Close the tab and it all evaporates, except your ledger, your
               gallery and your plan.
             </p>
           </div>
