@@ -363,14 +363,13 @@ html[data-machine-anomaly="pip-echo"] .companion-bob {
 html[data-machine-anomaly="colour-leak"] .relative.z-10 {
   filter: hue-rotate(38deg) saturate(1.18);
 }
-html[data-machine-anomaly="silent-wave"] .stage-bg::after {
-  opacity: 0.08;
-  animation-duration: 1.2s;
+html[data-machine-anomaly="silent-wave"] .relative.z-10 {
+  filter: grayscale(0.72) contrast(1.06);
 }
 @keyframes anomaly-time-slip {
-  0%, 93%, 100% { transform: translateX(0); }
-  94% { transform: translateX(1px); }
-  96% { transform: translateX(-1px); }
+  0%, 93%, 100% { opacity: 1; }
+  94% { opacity: 0.96; }
+  96% { opacity: 0.985; }
 }
 @keyframes anomaly-route {
   from { opacity: 0.55; transform: translateY(0); }
