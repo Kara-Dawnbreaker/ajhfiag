@@ -13,7 +13,7 @@ export function useReducedMotion() {
   return reduced;
 }
 
-/** One-shot "has this scrolled into view" flag. */
+/** Tracks current visibility so animation loops can pause and resume on scroll. */
 export function useInView<T extends HTMLElement>(rootMargin = "-8% 0px -8% 0px") {
   const ref = useRef<T | null>(null);
   const [inView, setInView] = useState(false);
@@ -26,7 +26,8 @@ export function useInView<T extends HTMLElement>(rootMargin = "-8% 0px -8% 0px")
     }
     const io = new IntersectionObserver(
       (entries) => {
-        for (const e of entries) if (e.isIntersecting) setInView(true);
+        const entry = entries[entries.length - 1];
+        if (entry) setInView(entry.isIntersecting);
       },
       { rootMargin, threshold: 0.05 },
     );
@@ -62,9 +63,9 @@ export function useCanvasStage(running: boolean, frame: StageFrame) {
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const r = canvas.getBoundingClientRect();
-      const w = Math.max(1, r.width);
-      const h = Math.max(1, r.height);
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.max(1, rect.width);
+      const h = Math.max(1, rect.height);
       canvas.width = Math.round(w * dpr);
       canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -72,55 +73,71 @@ export function useCanvasStage(running: boolean, frame: StageFrame) {
     };
     resize();
 
-    let ro: ResizeObserver | undefined;
+    let resizeObserver: ResizeObserver | undefined;
     if (typeof ResizeObserver !== "undefined") {
-      ro = new ResizeObserver(resize);
-      ro.observe(canvas);
+      resizeObserver = new ResizeObserver(resize);
+      resizeObserver.observe(canvas);
     } else {
       window.addEventListener("resize", resize);
     }
 
     let raf = 0;
     let last = performance.now();
-    const start = last;
+    const started = last;
+    let inViewport = typeof IntersectionObserver === "undefined";
+    let pageVisible = document.visibilityState !== "hidden";
+
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    };
+
     const loop = (now: number) => {
-      const dt = Math.min(0.05, (now - last) / 1000);
+      raf = 0;
+      if (!running || !inViewport || !pageVisible) return;
+      const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));
       last = now;
       const { w, h } = sizeRef.current;
-      frameRef.current(ctx, w, h, dt, (now - start) / 1000);
+      frameRef.current(ctx, w, h, dt, (now - started) / 1000);
       raf = requestAnimationFrame(loop);
     };
 
-    let io: IntersectionObserver | undefined;
-    let visible = true;
-    if (running && typeof IntersectionObserver !== "undefined") {
-      io = new IntersectionObserver(
+    const sync = () => {
+      const shouldRun = running && inViewport && pageVisible;
+      if (shouldRun && !raf) {
+        last = performance.now();
+        raf = requestAnimationFrame(loop);
+      } else if (!shouldRun) {
+        stop();
+      }
+    };
+
+    let intersectionObserver: IntersectionObserver | undefined;
+    if (typeof IntersectionObserver !== "undefined") {
+      intersectionObserver = new IntersectionObserver(
         (entries) => {
-          const v = entries.some((e) => e.isIntersecting);
-          if (v === visible) return;
-          visible = v;
-          if (v) {
-            last = performance.now();
-            raf = requestAnimationFrame(loop);
-          } else {
-            cancelAnimationFrame(raf);
-          }
+          const entry = entries[entries.length - 1];
+          inViewport = Boolean(entry?.isIntersecting);
+          sync();
         },
         { threshold: 0 },
       );
-      io.observe(canvas);
+      intersectionObserver.observe(canvas);
     }
 
-    if (running) {
-      last = performance.now();
-      raf = requestAnimationFrame(loop);
-    }
+    const onVisibility = () => {
+      pageVisible = document.visibilityState !== "hidden";
+      sync();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    sync();
 
     return () => {
-      cancelAnimationFrame(raf);
-      ro?.disconnect();
-      if (!ro) window.removeEventListener("resize", resize);
-      io?.disconnect();
+      stop();
+      resizeObserver?.disconnect();
+      intersectionObserver?.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
+      if (!resizeObserver) window.removeEventListener("resize", resize);
     };
   }, [running]);
 
