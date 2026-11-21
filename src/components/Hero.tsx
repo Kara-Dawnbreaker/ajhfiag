@@ -12,11 +12,14 @@ const PHRASES = [
 ];
 
 const MODULES = [
-  { n: "01", name: "Flow Field", tag: "paint with maths", href: "#flow", color: "#ffb020" },
+  { n: "01", name: "Flow Studio", tag: "paint with maths", href: "#flow", color: "#ffb020" },
   { n: "02", name: "Beat Machine", tag: "drums from thin air", href: "#beat", color: "#ff5f45" },
   { n: "03", name: "Reflex Arcade", tag: "prove your hands work", href: "#reflex", color: "#58b6ff" },
-  { n: "04", name: "Life Organ", tag: "a sweep that sings", href: "#life", color: "#ff8fd0" },
-  { n: "05", name: "The Ledger", tag: "your permanent record", href: "#ledger", color: "#f4ece0" },
+  { n: "04", name: "Blink", tag: "catch the impossible", href: "#blink", color: "#b46bff" },
+  { n: "05", name: "Life Organ", tag: "a sweep that sings", href: "#life", color: "#ff8fd0" },
+  { n: "06", name: "The Ledger", tag: "your permanent record", href: "#ledger", color: "#f4ece0" },
+  { n: "07", name: "Machine Anomalies", tag: "disturb the whole system", href: "#anomalies", color: "#b46bff" },
+  { n: "08", name: "Research Cases", tag: "five unsolved files", href: "#cases", color: "#58b6ff" },
 ];
 
 type Dot = { x: number; y: number; vx: number; vy: number; r: number; c: string };
@@ -157,7 +160,7 @@ export default function Hero() {
               cabinet of fiddling № 007
             </span>
             <span className="hidden h-3 w-px bg-bone/25 sm:block" />
-            <span>four creative stations · one permanent record</span>
+            <span>six stations · two strange departments</span>
           </div>
 
           <h1 className="mt-5 font-display leading-[0.78] font-extrabold tracking-[-0.03em]">
