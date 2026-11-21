@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { startClock } from "./lib/boredom";
+import { startClock, useStore } from "./lib/boredom";
 import TopBar from "./components/TopBar";
 import Hero from "./components/Hero";
 import FlowStudio from "./components/FlowStudio";
@@ -13,7 +13,6 @@ import MachineAnomalies from "./components/MachineAnomalies";
 import ResearchCases from "./components/ResearchCases";
 import Footer from "./components/Footer";
 import Companion from "./components/Companion";
-import { useStore } from "./lib/boredom";
 
 const JUMP: Record<string, string> = {
   "1": "flow", "2": "beat", "3": "reflex", "4": "blink", "5": "life", "6": "ledger", "7": "anomalies", "8": "cases",
