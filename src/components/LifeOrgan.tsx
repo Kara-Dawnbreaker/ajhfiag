@@ -162,6 +162,7 @@ export default function LifeOrgan() {
   const total = useRef(0);
   const head = useRef(0);
   const pending = useRef(0);
+  const pendingGens = useRef(0);
   const drag = useRef({ on: false, value: 1 });
   const cfg = useRef({ playing: false, bpm: 120, ruleIdx: 0 });
   cfg.current = { playing, bpm, ruleIdx };
@@ -176,7 +177,7 @@ export default function LifeOrgan() {
     }
     gridRef.current = out;
     genRef.current++;
-    track("gens");
+    pendingGens.current++;
   };
 
   const playColumn = (c: number) => {
@@ -281,9 +282,13 @@ export default function LifeOrgan() {
         track("notes", pending.current);
         pending.current = 0;
       }
+      if (pendingGens.current > 0) {
+        track("gens", pendingGens.current);
+        pendingGens.current = 0;
+      }
       const gen = genRef.current;
       setUi((u) => (u.gen === gen && u.pop === pop ? u : { gen, pop }));
-    }, 250);
+    }, 500);
     return () => window.clearInterval(id);
   }, [track]);
 
@@ -323,7 +328,7 @@ export default function LifeOrgan() {
   return (
     <SectionShell
       id="life"
-      index="06"
+      index="05"
       kicker="cellular automaton · sweep sequencer"
       title="Life, but it sings."
       blurb="Conway's Game of Life wrapped around a sweeping playhead. Each column plays the living cells it passes: higher rows are higher notes, and every rule has its own instrument. Draw to seed it, pick a rule, and let the sweep play. One full sweep is one generation."
@@ -337,7 +342,7 @@ export default function LifeOrgan() {
           >
             {playing ? "❚❚ pause" : "▶ sweep"}
           </button>
-          <button className="btn" onClick={stepOnce} type="button">
+          <button className="btn" onClick={stepOnce} disabled={playing} type="button">
             step
           </button>
           <button className="btn" onClick={() => loadPreset("clear")} type="button">

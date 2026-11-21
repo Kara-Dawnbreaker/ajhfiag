@@ -16,15 +16,13 @@ const QUIPS: Record<string, string[]> = {
   "LOADED A GROOVE": ["Classic. Respect."],
   "ROLLED THE DICE": ["Chaos is a ladder."],
   MIXED: ["The mute button: the great silencer."],
-  "PLANTED A STAR": ["A new sun. Please don't crash into it."],
-  "BUILT A SOLAR SYSTEM": ["Kepler would be proud. Probably."],
-  "COLLAPSED STARS": ["Black hole cleanup complete."],
-  "STIRRED THE VOID": ["Physics: 1. You: sure."],
   "STARTED A RUN": ["Hands up. Eyes wide. Go!"],
+  "STARTED BLINK": ["A button that refuses to sit still. I respect that."],
+  "BLINK STREAK": ["That target is getting nervous."],
+  "BLINK RUN ENDED": ["Blink and it was gone. Your streak, I mean."],
   "PLAYED THE ARCADE": ["Your thumbs have stories to tell."],
   COMBO: ["Combo! The machine is impressed. Slightly."],
   "FROZE TIME": ["Shh. Time is on a break."],
-  "CONSULTED THE ORACLE": ["The oracle has spoken. Do not argue."],
   COMMITTED: ["Look at you, committing. Brave."],
   "DID A THING": ["A real, actual thing. Ticked. Wow."],
   COPIED: ["Copied. Now go paste it somewhere fun."],
@@ -40,6 +38,12 @@ const QUIPS: Record<string, string[]> = {
   "LOADED PULSAR": ["Three-way symmetry. Show-off."],
   "LOADED GUN": ["Gliders incoming. Do not stand in the way."],
   POKED: ["Ow. Okay. That was fine.", "Hi, I'm PIP. I'm bored too.", "Boop."],
+  "ANOMALY CLOCK-SLIP": ["My clock just blinked. I am choosing not to panic.", "Time is doing that thing again."],
+  "ANOMALY ROUTE-GHOST": ["There is a door where no door should be.", "I did not add that route. Did you?"],
+  "ANOMALY PIP-ECHO": ["Wait. I heard myself answer before I spoke.", "There are two of me in the signal. Only one is supposed to be here."],
+  "ANOMALY COLOUR-LEAK": ["The palette is leaking into everything!", "I quite like this colour. I do not like where it came from."],
+  "ANOMALY SILENT-WAVE": ["The machine has gone quiet. I can still hear my own thoughts.", "Sound channel is missing. Visual channel is still alive."],
+  "ANOMALY CONTAINED": ["Signal contained. The machine can breathe again.", "Back to normal. Probably."],
 };
 
 const IDLE = [
@@ -58,6 +62,10 @@ export default function Companion() {
   const ping = useStore((s) => s.ping);
   const toast = useStore((s) => s.toast);
   const lastNudge = useStore((s) => s.lastNudge);
+  const stats = useStore((s) => s.stats);
+  const latestLog = useStore((s) => s.log[s.log.length - 1] ?? null);
+  const pipTier = stats.events >= 300 ? 3 : stats.events >= 100 ? 2 : stats.events >= 25 ? 1 : 0;
+  const pipAccent = ["#35e39f", "#58b6ff", "#ffb020", "#b46bff"][pipTier];
   const { nudge } = useBoredom();
 
   const [line, setLine] = useState<{ text: string; id: number } | null>(null);
@@ -65,6 +73,7 @@ export default function Companion() {
   const robotRef = useRef<HTMLButtonElement | null>(null);
   const pupilRef = useRef<SVGGElement | null>(null);
   const lastNudgeRef = useRef(lastNudge);
+  const tierRef = useRef(pipTier);
   lastNudgeRef.current = lastNudge;
 
   const say = (text: string, ms = 3600) => {
@@ -87,6 +96,19 @@ export default function Companion() {
     say(pick(opts));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ping]);
+
+  // PIP evolves as the whole machine gains experience.
+  useEffect(() => {
+    if (pipTier > tierRef.current) say(["", "PIP update! New sensors online.", "Look at me. I have evolved.", "Maximum PIP. I am basically the machine now."][pipTier], 4600);
+    tierRef.current = pipTier;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pipTier]);
+
+  // React when a hidden discovery is found.
+  useEffect(() => {
+    if (latestLog?.text.startsWith("discovery found")) say("Secret discovered: " + latestLog.text.split("·").pop()?.trim() + ". Nice work.", 4600);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latestLog?.id]);
 
   // Celebrate badges.
   useEffect(() => {
@@ -148,11 +170,11 @@ export default function Companion() {
       >
         <svg viewBox="0 0 64 64" className="h-full w-full drop-shadow-[0_8px_18px_rgba(0,0,0,0.6)]">
           <line x1="32" y1="8" x2="32" y2="14" stroke="#a2938a" strokeWidth="2" />
-          <circle cx="32" cy="6" r="3.2" fill="#ff5f45" className="blink" />
+          <circle cx="32" cy="6" r="3.2" fill={pipAccent} className="blink" />
           <rect x="10" y="14" width="44" height="36" rx="11" fill="#1e1715" stroke="#f4ece0" strokeOpacity="0.25" />
           <rect x="16" y="21" width="32" height="20" rx="7" fill="#0f0c0b" />
           <g className="eye-blink">
-            <circle cx="25" cy="31" r="5" fill="#35e39f" />
+            <circle cx="25" cy="31" r="5" fill={pipAccent} />
             <circle cx="39" cy="31" r="5" fill="#35e39f" />
           </g>
           <g ref={pupilRef} style={{ transition: "transform 0.1s linear" }}>

@@ -298,3 +298,90 @@ input[type="range"]::-moz-range-thumb {
   .stamp-in { animation: none !important; opacity: 1; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* Accessible keyboard focus and disabled controls. */
+:focus-visible { outline: 2px solid var(--color-amber); outline-offset: 3px; }
+button:disabled { cursor: not-allowed; opacity: 0.45; }
+
+
+/* ---------- unlockable machine atmospheres ---------- */
+:root[data-machine-theme="ember"] {
+  --color-ink: #160d0b;
+  --color-ink-2: #21120e;
+  --color-ink-3: #2d1913;
+  --color-amber: #ff8a3d;
+  --color-coral: #ff4e36;
+  --color-mint: #ffd166;
+  --color-sky: #ffb18a;
+  --color-plum: #e87952;
+}
+:root[data-machine-theme="deep-sea"] {
+  --color-ink: #07131b;
+  --color-ink-2: #0c1c27;
+  --color-ink-3: #122b38;
+  --color-amber: #65d6d0;
+  --color-coral: #53a8d8;
+  --color-mint: #8be9d5;
+  --color-sky: #7bbcff;
+  --color-plum: #a7a1ff;
+}
+
+
+/* ---------- machine-wide anomaly field ---------- */
+html[data-machine-anomaly] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.12;
+  background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(180,107,255,0.12) 4px);
+  mix-blend-mode: screen;
+}
+html[data-machine-anomaly="clock-slip"] .relative.z-10 {
+  animation: anomaly-time-slip 7s steps(2, end) infinite;
+}
+html[data-machine-anomaly="route-ghost"] body::before {
+  content: "UNMAPPED ROUTE // SIGNAL FROM OUTSIDE THE INDEX";
+  position: fixed;
+  z-index: 81;
+  right: 1rem;
+  bottom: 1rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.65rem 0.8rem;
+  border: 1px solid rgba(180,107,255,0.55);
+  background: rgba(15,12,11,0.92);
+  color: #d5aaff;
+  font: 10px/1.5 "IBM Plex Mono", monospace;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+  animation: anomaly-route 1.8s ease-in-out infinite alternate;
+}
+html[data-machine-anomaly="pip-echo"] .companion-bob {
+  filter: drop-shadow(-7px 0 0 rgba(180,107,255,0.45)) drop-shadow(7px 0 0 rgba(88,182,255,0.3));
+}
+html[data-machine-anomaly="colour-leak"] main,
+html[data-machine-anomaly="colour-leak"] header,
+html[data-machine-anomaly="colour-leak"] footer,
+html[data-machine-anomaly="colour-leak"] .companion-bob {
+  filter: hue-rotate(38deg) saturate(1.18);
+}
+html[data-machine-anomaly="silent-wave"] main,
+html[data-machine-anomaly="silent-wave"] header,
+html[data-machine-anomaly="silent-wave"] footer,
+html[data-machine-anomaly="silent-wave"] .companion-bob {
+  filter: grayscale(0.72) contrast(1.06);
+}
+@keyframes anomaly-time-slip {
+  0%, 93%, 100% { opacity: 1; }
+  94% { opacity: 0.96; }
+  96% { opacity: 0.985; }
+}
+@keyframes anomaly-route {
+  from { opacity: 0.55; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(-4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-machine-anomaly] .relative.z-10,
+  html[data-machine-anomaly] body::before { animation: none !important; }
+}

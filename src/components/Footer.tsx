@@ -40,8 +40,7 @@ export default function Footer() {
             </h2>
             <p className="mt-5 max-w-md text-[0.92rem] leading-relaxed text-ash">
               Everything here runs in your browser: the paintings are noise fields, the drums are
-              oscillators, the life organ is a cellular automaton that sings, and the oracle is three
-              arrays in a trench coat. Close the tab and it all evaporates, except your ledger, your
+              oscillators, the life organ is a cellular automaton that sings. Close the tab and it all evaporates, except your ledger, your
               gallery and your plan.
             </p>
           </div>
@@ -62,7 +61,7 @@ export default function Footer() {
               <span className="font-mono text-[0.58rem] tracking-[0.22em] text-ash uppercase">keyboard</span>
               <ul className="mt-2.5 space-y-1.5 font-mono text-[0.62rem] text-ash">
                 <li>
-                  <span className="kbd">1</span>–<span className="kbd">7</span> jump to a machine
+                  <span className="kbd">1</span>–<span className="kbd">5</span> jump to a section
                 </li>
                 <li>
                   <span className="kbd">space</span> start a reflex run

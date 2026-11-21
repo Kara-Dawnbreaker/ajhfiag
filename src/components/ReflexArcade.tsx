@@ -373,7 +373,7 @@ export default function ReflexArcade() {
   return (
     <SectionShell
       id="reflex"
-      index="04"
+      index="03"
       kicker="30-second reflex test"
       title="Hands. Do they still work?"
       blurb="Thirty seconds. Tap the green ones, chase the gold, and leave the red ones alone. Blue snowflakes freeze the clock for three seconds. Every four hits raises your multiplier, and every new level makes the machine faster."

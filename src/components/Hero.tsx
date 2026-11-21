@@ -12,13 +12,14 @@ const PHRASES = [
 ];
 
 const MODULES = [
-  { n: "01", name: "Flow Field", tag: "paint with maths", href: "#flow", color: "#ffb020" },
+  { n: "01", name: "Flow Studio", tag: "paint with maths", href: "#flow", color: "#ffb020" },
   { n: "02", name: "Beat Machine", tag: "drums from thin air", href: "#beat", color: "#ff5f45" },
-  { n: "03", name: "Gravity Well", tag: "bend space with a cursor", href: "#gravity", color: "#35e39f" },
-  { n: "04", name: "Reflex Arcade", tag: "prove your hands work", href: "#reflex", color: "#58b6ff" },
-  { n: "05", name: "The Oracle", tag: "outsource the decision", href: "#oracle", color: "#b46bff" },
-  { n: "06", name: "Life Organ", tag: "a sweep that sings", href: "#life", color: "#ff8fd0" },
-  { n: "07", name: "The Ledger", tag: "your permanent record", href: "#ledger", color: "#f4ece0" },
+  { n: "03", name: "Reflex Arcade", tag: "prove your hands work", href: "#reflex", color: "#58b6ff" },
+  { n: "04", name: "Blink", tag: "catch the impossible", href: "#blink", color: "#b46bff" },
+  { n: "05", name: "Life Organ", tag: "a sweep that sings", href: "#life", color: "#ff8fd0" },
+  { n: "06", name: "The Ledger", tag: "your permanent record", href: "#ledger", color: "#f4ece0" },
+  { n: "07", name: "Machine Anomalies", tag: "disturb the whole system", href: "#anomalies", color: "#b46bff" },
+  { n: "08", name: "Research Cases", tag: "five unsolved files", href: "#cases", color: "#58b6ff" },
 ];
 
 type Dot = { x: number; y: number; vx: number; vy: number; r: number; c: string };
@@ -137,7 +138,7 @@ export default function Hero() {
     return () => window.clearInterval(id);
   }, []);
 
-  const ticker = "PAINT · DRUM · ORBIT · REACT · DECIDE · GROW · WASTE TIME ON PURPOSE · ";
+  const ticker = "PAINT · DRUM · REACT · GROW · KEEP SCORE · WASTE TIME ON PURPOSE · ";
 
   return (
     <section id="top" className="relative min-h-[100svh] overflow-hidden pt-32 md:pt-28">
@@ -159,7 +160,7 @@ export default function Hero() {
               cabinet of fiddling № 007
             </span>
             <span className="hidden h-3 w-px bg-bone/25 sm:block" />
-            <span>seven stations · one permanent record</span>
+            <span>six stations · two strange departments</span>
           </div>
 
           <h1 className="mt-5 font-display leading-[0.78] font-extrabold tracking-[-0.03em]">
@@ -170,21 +171,18 @@ export default function Hero() {
           </h1>
 
           <p className="mt-6 max-w-xl text-[1.02rem] leading-relaxed text-bone/80">
-            Six small machines and a ledger that never forgets. Paint with mathematics, build a beat out
-            of thin air, bend gravity with your cursor, prove your hands still work, grow a cellular
-            world that sings, then let a slot machine plan whatever's left of the day. A little robot
-            called PIP is bored too, and will say so.
+            Four interactive stations and a ledger that never forgets. Paint with mathematics, build a beat out of thin air, prove your hands still work, and grow a cellular world that sings. A little robot called PIP is bored too, and will say so.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a href="#flow" className="btn border-amber bg-amber text-ink hover:border-bone hover:bg-bone">
               start fiddling ↓
             </a>
-            <a href="#oracle" className="btn">
-              randomise my afternoon
+            <a href="#reflex" className="btn">
+              test my reflexes
             </a>
             <span className="ml-1 hidden items-center gap-2 font-mono text-[0.62rem] text-ash sm:flex">
-              <span className="kbd">1</span>–<span className="kbd">7</span> jumps between stations
+              <span className="kbd">1</span>–<span className="kbd">5</span> jump between sections
             </span>
           </div>
 

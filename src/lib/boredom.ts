@@ -11,6 +11,7 @@ export type LogItem = { id: number; t: number; text: string; tone: "info" | "goo
 export type Float = { id: number; label: string; amount: number };
 export type Toast = { id: number; title: string; sub: string; glyph: string; color: string };
 export type Ping = { id: number; label: string };
+export type MachineAnomaly = { id: string; startedAt: number; expiresAt: number };
 
 export type State = {
   boredom: number;
@@ -27,6 +28,7 @@ export type State = {
   toast: Toast | null;
   ping: Ping | null;
   lastNudge: number;
+  anomaly: MachineAnomaly | null;
 };
 
 const CORE_KEY = "bm.v2.core";
@@ -55,6 +57,7 @@ function freshState(): State {
     toast: null,
     ping: null,
     lastNudge: 0,
+    anomaly: null,
   };
 }
 
@@ -75,8 +78,9 @@ function load(): State {
     s.plan = core.plan ?? [];
     s.log = (core.log ?? []).slice(-LOG_CAP);
     s.runs = core.runs ?? [];
-    s.unlocked = core.unlocked ?? [];
+    s.unlocked = (core.unlocked ?? []).filter((id) => BADGES.some((badge) => badge.id === id));
     s.dareDayRecorded = core.dareDayRecorded ?? null;
+    s.anomaly = core.anomaly && core.anomaly.expiresAt > Date.now() ? core.anomaly : null;
     if (core.daily && core.daily.date === todayKey()) s.daily = core.daily;
   } else {
     // Migrate the first prototype's keys so an existing player keeps their progress.
@@ -105,12 +109,13 @@ function persistCore() {
           log: state.log,
           runs: state.runs,
           unlocked: state.unlocked,
+          anomaly: state.anomaly,
         }),
       );
     } catch {
       /* storage blocked or full */
     }
-  }, 250);
+  }, 500);
 }
 
 function pushLog(log: LogItem[], text: string, tone: LogItem["tone"] = "info"): LogItem[] {
@@ -214,6 +219,27 @@ function nudge(amount: number, label = "") {
   });
 }
 
+function activateAnomaly(id: string, duration = 24000) {
+  const startedAt = Date.now();
+  commit((s) => ({
+    ...s,
+    anomaly: { id, startedAt, expiresAt: startedAt + duration },
+    ping: { id: nid(), label: `ANOMALY ${id.toUpperCase()}` },
+    log: pushLog(s.log, `global anomaly activated · ${id}`, "warn"),
+  }));
+  window.setTimeout(() => {
+    commit((s) => s.anomaly?.startedAt === startedAt
+      ? { ...s, anomaly: null, log: pushLog(s.log, `global anomaly contained · ${id}`, "good") }
+      : s);
+  }, duration);
+}
+
+function clearAnomaly() {
+  commit((s) => s.anomaly
+    ? { ...s, anomaly: null, log: pushLog(s.log, `global anomaly manually contained · ${s.anomaly.id}`, "good"), ping: { id: nid(), label: "ANOMALY CONTAINED" } }
+    : s);
+}
+
 function reset() {
   commit((s) => ({ ...s, boredom: 100, floats: [], celebrate: false }));
 }
@@ -301,6 +327,9 @@ function wipe() {
   try {
     localStorage.removeItem(CORE_KEY);
     localStorage.removeItem(GAL_KEY);
+    localStorage.removeItem("bm.v3.discoveries");
+    localStorage.removeItem("bm.v3.theme");
+    localStorage.removeItem("bm.v3.week");
   } catch {
     /* ignore */
   }
@@ -321,6 +350,8 @@ export const actions = {
   clearPlan,
   pinImage,
   unpin,
+  activateAnomaly,
+  clearAnomaly,
   wipe,
 };
 
@@ -330,13 +361,13 @@ export const useBoredom = () => actions;
 let clockStarted = false;
 let ticks = 0;
 
-/** Once a second: count visible time, roll the day over, and let boredom creep back when idle. */
+/** Every five seconds: count visible time, roll the day over, and let boredom creep back when idle. */
 export function startClock() {
   if (clockStarted || typeof window === "undefined") return;
   clockStarted = true;
   window.setInterval(() => {
     if (document.visibilityState !== "visible") return;
-    ticks++;
+    ticks += 5;
     commit((s) => {
       const today = todayKey();
       const daily = s.daily.date === today ? s.daily : emptyDaily(today);
@@ -345,9 +376,10 @@ export function startClock() {
       return {
         ...s,
         daily,
-        stats: { ...s.stats, seconds: s.stats.seconds + 1 },
+        stats: { ...s.stats, seconds: s.stats.seconds + 5 },
         boredom: creep ? Math.min(100, s.boredom + 1) : s.boredom,
+        anomaly: s.anomaly && s.anomaly.expiresAt > Date.now() ? s.anomaly : null,
       };
     });
-  }, 1000);
+  }, 5000);
 }

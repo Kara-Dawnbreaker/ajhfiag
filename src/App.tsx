@@ -1,29 +1,32 @@
 import { useEffect } from "react";
-import { startClock } from "./lib/boredom";
+import { startClock, useStore } from "./lib/boredom";
 import TopBar from "./components/TopBar";
 import Hero from "./components/Hero";
 import FlowStudio from "./components/FlowStudio";
 import BeatMachine from "./components/BeatMachine";
 import Interlude from "./components/Interlude";
-import GravitySandbox from "./components/GravitySandbox";
 import ReflexArcade from "./components/ReflexArcade";
-import Oracle from "./components/Oracle";
+import Blink from "./components/Blink";
 import LifeOrgan from "./components/LifeOrgan";
 import Ledger from "./components/Ledger";
+import MachineAnomalies from "./components/MachineAnomalies";
+import ResearchCases from "./components/ResearchCases";
 import Footer from "./components/Footer";
 import Companion from "./components/Companion";
 
 const JUMP: Record<string, string> = {
-  "1": "flow",
-  "2": "beat",
-  "3": "gravity",
-  "4": "reflex",
-  "5": "oracle",
-  "6": "life",
-  "7": "ledger",
+  "1": "flow", "2": "beat", "3": "reflex", "4": "blink", "5": "life", "6": "ledger", "7": "anomalies", "8": "cases",
 };
 
 export default function App() {
+  const anomaly = useStore((s) => s.anomaly);
+
+  useEffect(() => {
+    if (anomaly) document.documentElement.dataset.machineAnomaly = anomaly.id;
+    else delete document.documentElement.dataset.machineAnomaly;
+    return () => { delete document.documentElement.dataset.machineAnomaly; };
+  }, [anomaly?.id]);
+
   useEffect(() => {
     startClock();
     const onKey = (e: KeyboardEvent) => {
@@ -48,11 +51,12 @@ export default function App() {
           <FlowStudio />
           <BeatMachine />
           <Interlude />
-          <GravitySandbox />
           <ReflexArcade />
-          <Oracle />
+          <Blink />
           <LifeOrgan />
           <Ledger />
+          <MachineAnomalies />
+          <ResearchCases />
         </main>
         <Footer />
       </div>
