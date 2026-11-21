@@ -75,7 +75,7 @@ function load(): State {
     s.plan = core.plan ?? [];
     s.log = (core.log ?? []).slice(-LOG_CAP);
     s.runs = core.runs ?? [];
-    s.unlocked = core.unlocked ?? [];
+    s.unlocked = (core.unlocked ?? []).filter((id) => BADGES.some((badge) => badge.id === id));
     s.dareDayRecorded = core.dareDayRecorded ?? null;
     if (core.daily && core.daily.date === todayKey()) s.daily = core.daily;
   } else {
@@ -110,7 +110,7 @@ function persistCore() {
     } catch {
       /* storage blocked or full */
     }
-  }, 250);
+  }, 500);
 }
 
 function pushLog(log: LogItem[], text: string, tone: LogItem["tone"] = "info"): LogItem[] {
