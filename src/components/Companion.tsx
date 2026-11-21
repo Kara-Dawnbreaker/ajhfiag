@@ -53,6 +53,10 @@ export default function Companion() {
   const ping = useStore((s) => s.ping);
   const toast = useStore((s) => s.toast);
   const lastNudge = useStore((s) => s.lastNudge);
+  const stats = useStore((s) => s.stats);
+  const latestLog = useStore((s) => s.log[s.log.length - 1] ?? null);
+  const pipTier = stats.events >= 300 ? 3 : stats.events >= 100 ? 2 : stats.events >= 25 ? 1 : 0;
+  const pipAccent = ["#35e39f", "#58b6ff", "#ffb020", "#b46bff"][pipTier];
   const { nudge } = useBoredom();
 
   const [line, setLine] = useState<{ text: string; id: number } | null>(null);
@@ -60,6 +64,7 @@ export default function Companion() {
   const robotRef = useRef<HTMLButtonElement | null>(null);
   const pupilRef = useRef<SVGGElement | null>(null);
   const lastNudgeRef = useRef(lastNudge);
+  const tierRef = useRef(pipTier);
   lastNudgeRef.current = lastNudge;
 
   const say = (text: string, ms = 3600) => {
@@ -83,7 +88,7 @@ export default function Companion() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ping]);
 
-  // Celebrate badges.
+  // PIP evolves as the whole machine gains experience.\n  useEffect(() => {\n    if (pipTier > tierRef.current) say(["", "PIP update! New sensors online.", "Look at me. I have evolved.", "Maximum PIP. I am basically the machine now."][pipTier], 4600);\n    tierRef.current = pipTier;\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [pipTier]);\n\n  // React when a hidden discovery is found.\n  useEffect(() => {\n    if (latestLog?.text.startsWith("discovery found")) say(`Secret discovered: ${latestLog.text.split("·").pop()?.trim()}. Nice work.`, 4600);\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [latestLog?.id]);\n\n  // Celebrate badges.
   useEffect(() => {
     if (!toast) return;
     say(`badge unlocked: ${toast.title.toLowerCase()} ${toast.glyph}`, 4200);
@@ -143,11 +148,11 @@ export default function Companion() {
       >
         <svg viewBox="0 0 64 64" className="h-full w-full drop-shadow-[0_8px_18px_rgba(0,0,0,0.6)]">
           <line x1="32" y1="8" x2="32" y2="14" stroke="#a2938a" strokeWidth="2" />
-          <circle cx="32" cy="6" r="3.2" fill="#ff5f45" className="blink" />
+          <circle cx="32" cy="6" r="3.2" fill={pipAccent} className="blink" />
           <rect x="10" y="14" width="44" height="36" rx="11" fill="#1e1715" stroke="#f4ece0" strokeOpacity="0.25" />
           <rect x="16" y="21" width="32" height="20" rx="7" fill="#0f0c0b" />
           <g className="eye-blink">
-            <circle cx="25" cy="31" r="5" fill="#35e39f" />
+            <circle cx="25" cy="31" r="5" fill={pipAccent} />
             <circle cx="39" cy="31" r="5" fill="#35e39f" />
           </g>
           <g ref={pupilRef} style={{ transition: "transform 0.1s linear" }}>
