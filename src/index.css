@@ -325,3 +325,58 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
   --color-sky: #7bbcff;
   --color-plum: #a7a1ff;
 }
+
+
+/* ---------- machine-wide anomaly field ---------- */
+html[data-machine-anomaly] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.12;
+  background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(180,107,255,0.12) 4px);
+  mix-blend-mode: screen;
+}
+html[data-machine-anomaly="clock-slip"] .relative.z-10 {
+  animation: anomaly-time-slip 7s steps(2, end) infinite;
+}
+html[data-machine-anomaly="route-ghost"] body::before {
+  content: "UNMAPPED ROUTE // SIGNAL FROM OUTSIDE THE INDEX";
+  position: fixed;
+  z-index: 81;
+  right: 1rem;
+  bottom: 1rem;
+  max-width: calc(100vw - 2rem);
+  padding: 0.65rem 0.8rem;
+  border: 1px solid rgba(180,107,255,0.55);
+  background: rgba(15,12,11,0.92);
+  color: #d5aaff;
+  font: 10px/1.5 "IBM Plex Mono", monospace;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+  animation: anomaly-route 1.8s ease-in-out infinite alternate;
+}
+html[data-machine-anomaly="pip-echo"] .companion-bob {
+  filter: drop-shadow(-7px 0 0 rgba(180,107,255,0.45)) drop-shadow(7px 0 0 rgba(88,182,255,0.3));
+}
+html[data-machine-anomaly="colour-leak"] .relative.z-10 {
+  filter: hue-rotate(38deg) saturate(1.18);
+}
+html[data-machine-anomaly="silent-wave"] .stage-bg::after {
+  opacity: 0.08;
+  animation-duration: 1.2s;
+}
+@keyframes anomaly-time-slip {
+  0%, 93%, 100% { transform: translateX(0); }
+  94% { transform: translateX(1px); }
+  96% { transform: translateX(-1px); }
+}
+@keyframes anomaly-route {
+  from { opacity: 0.55; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(-4px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-machine-anomaly] .relative.z-10,
+  html[data-machine-anomaly] body::before { animation: none !important; }
+}
