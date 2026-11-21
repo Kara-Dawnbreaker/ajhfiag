@@ -168,10 +168,7 @@ export default function Hero() {
           </h1>
 
           <p className="mt-6 max-w-xl text-[1.02rem] leading-relaxed text-bone/80">
-            Six small machines and a ledger that never forgets. Paint with mathematics, build a beat out
-            of thin air, bend gravity with your cursor, prove your hands still work, grow a cellular
-            world that sings, then let a slot machine plan whatever's left of the day. A little robot
-            called PIP is bored too, and will say so.
+            Four interactive stations and a ledger that never forgets. Paint with mathematics, build a beat out of thin air, prove your hands still work, and grow a cellular world that sings. A little robot called PIP is bored too, and will say so.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
