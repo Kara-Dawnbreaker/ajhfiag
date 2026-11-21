@@ -57,7 +57,7 @@ export default function Ledger() {
   return (
     <SectionShell
       id="ledger"
-      index="05"
+      index="06"
       kicker="your permanent record"
       title="The ledger remembers everything."
       blurb="Daily dares reset at midnight. Badges, gallery and stats don't. Every interaction on this page lands here, timestamped, like a machine that keeps score of your procrastination."
