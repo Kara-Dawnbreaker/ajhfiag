@@ -55,6 +55,7 @@ export default function TopBar() {
   const boredom = useStore((s) => s.boredom);
   const celebrate = useStore((s) => s.celebrate);
   const floats = useStore((s) => s.floats);
+  const anomaly = useStore((s) => s.anomaly);
   const { reset } = useBoredom();
   const cured = boredom <= 0;
   const [scrolled, setScrolled] = useState(false);
@@ -107,7 +108,7 @@ export default function TopBar() {
             <button type="button" onClick={toggleSound} aria-label={muted ? "unmute sound" : "mute sound"} title={muted ? "sound off" : "sound on"} className="flex h-9 w-9 items-center justify-center border border-bone/15 text-ash transition-colors hover:border-bone/40 hover:text-bone">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z" />{muted ? <path d="M22 9l-6 6M16 9l6 6" /> : <path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14" />}</svg>
             </button>
-            <div className="hidden text-right sm:block"><div className="font-mono text-[0.55rem] tracking-[0.24em] text-ash uppercase">boredom</div><div className={cn("font-display text-[0.95rem] leading-none font-extrabold tabular-nums", cured ? "text-mint" : "text-bone")}>{cured ? "CURED" : `${Math.round(boredom)}%`}</div></div>
+            <div className="hidden text-right sm:block">{anomaly ? <div className="font-mono text-[0.5rem] tracking-[0.14em] text-plum blink">ANOMALY ACTIVE</div> : null}<div className="font-mono text-[0.55rem] tracking-[0.24em] text-ash uppercase">boredom</div><div className={cn("font-display text-[0.95rem] leading-none font-extrabold tabular-nums", cured ? "text-mint" : "text-bone")}>{cured ? "CURED" : `${Math.round(boredom)}%`}</div></div>
             <Meter value={boredom} />
             {cured ? <button className="btn pop-in" onClick={reset} type="button">again</button> : null}
             {floats.map((f) => <span key={f.id} className="rise-score pointer-events-none absolute top-full right-8 mt-1 font-mono text-[0.62rem] whitespace-nowrap text-mint">−{f.amount} {f.label}</span>)}
