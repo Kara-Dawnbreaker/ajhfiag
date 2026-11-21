@@ -7,8 +7,9 @@ const NAV = [
   { id: "flow", label: "Flow", n: "01" },
   { id: "beat", label: "Beat", n: "02" },
   { id: "reflex", label: "Reflex", n: "03" },
-  { id: "life", label: "Life", n: "04" },
-  { id: "ledger", label: "Ledger", n: "05" },
+  { id: "blink", label: "Blink", n: "04" },
+  { id: "life", label: "Life", n: "05" },
+  { id: "ledger", label: "Ledger", n: "06" },
 ];
 
 const COLORS = ["#ffb020", "#ff5f45", "#35e39f", "#58b6ff", "#b46bff", "#f4ece0"];
