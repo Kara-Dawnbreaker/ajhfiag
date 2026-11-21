@@ -9,11 +9,13 @@ import ReflexArcade from "./components/ReflexArcade";
 import Blink from "./components/Blink";
 import LifeOrgan from "./components/LifeOrgan";
 import Ledger from "./components/Ledger";
+import MachineAnomalies from "./components/MachineAnomalies";
+import ResearchCases from "./components/ResearchCases";
 import Footer from "./components/Footer";
 import Companion from "./components/Companion";
 
 const JUMP: Record<string, string> = {
-  "1": "flow", "2": "beat", "3": "reflex", "4": "blink", "5": "life", "6": "ledger",
+  "1": "flow", "2": "beat", "3": "reflex", "4": "blink", "5": "life", "6": "ledger", "7": "anomalies", "8": "cases",
 };
 
 export default function App() {
@@ -45,6 +47,8 @@ export default function App() {
           <Blink />
           <LifeOrgan />
           <Ledger />
+          <MachineAnomalies />
+          <ResearchCases />
         </main>
         <Footer />
       </div>
