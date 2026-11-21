@@ -45,7 +45,7 @@ export default function ProgressionHub() {
   const [week, setWeek] = usePersistentState<{ key: string; baseline: Stats }>("bm.v3.week", { key: mondayKey(), baseline: stats });
   const [randomPick, setRandomPick] = useState<{ station: typeof STATIONS[number]; prompt: string } | null>(null);
 
-  const xp = Math.floor(totalXp(stats));
+  const xp = Math.floor(totalXp(stats) + found.length * 30);
   const level = Math.max(1, Math.floor(Math.sqrt(xp / 35)) + 1);
   const dares = pickDares(daily.date);
   const weeklyTasks = [
