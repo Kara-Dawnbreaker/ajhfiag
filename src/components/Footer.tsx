@@ -62,7 +62,7 @@ export default function Footer() {
               <span className="font-mono text-[0.58rem] tracking-[0.22em] text-ash uppercase">keyboard</span>
               <ul className="mt-2.5 space-y-1.5 font-mono text-[0.62rem] text-ash">
                 <li>
-                  <span className="kbd">1</span>–<span className="kbd">7</span> jump to a machine
+                  <span className="kbd">1</span>–<span className="kbd">5</span> jump to a section
                 </li>
                 <li>
                   <span className="kbd">space</span> start a reflex run
