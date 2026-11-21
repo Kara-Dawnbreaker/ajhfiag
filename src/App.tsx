@@ -6,17 +6,14 @@ import FlowStudio from "./components/FlowStudio";
 import BeatMachine from "./components/BeatMachine";
 import Interlude from "./components/Interlude";
 import ReflexArcade from "./components/ReflexArcade";
+import Blink from "./components/Blink";
 import LifeOrgan from "./components/LifeOrgan";
 import Ledger from "./components/Ledger";
 import Footer from "./components/Footer";
 import Companion from "./components/Companion";
 
 const JUMP: Record<string, string> = {
-  "1": "flow",
-  "2": "beat",
-  "3": "reflex",
-  "4": "life",
-  "5": "ledger",
+  "1": "flow", "2": "beat", "3": "reflex", "4": "blink", "5": "life", "6": "ledger",
 };
 
 export default function App() {
@@ -45,6 +42,7 @@ export default function App() {
           <BeatMachine />
           <Interlude />
           <ReflexArcade />
+          <Blink />
           <LifeOrgan />
           <Ledger />
         </main>
