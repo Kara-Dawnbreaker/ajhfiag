@@ -13,12 +13,21 @@ import MachineAnomalies from "./components/MachineAnomalies";
 import ResearchCases from "./components/ResearchCases";
 import Footer from "./components/Footer";
 import Companion from "./components/Companion";
+import { useStore } from "./lib/boredom";
 
 const JUMP: Record<string, string> = {
   "1": "flow", "2": "beat", "3": "reflex", "4": "blink", "5": "life", "6": "ledger", "7": "anomalies", "8": "cases",
 };
 
 export default function App() {
+  const anomaly = useStore((s) => s.anomaly);
+
+  useEffect(() => {
+    if (anomaly) document.documentElement.dataset.machineAnomaly = anomaly.id;
+    else delete document.documentElement.dataset.machineAnomaly;
+    return () => { delete document.documentElement.dataset.machineAnomaly; };
+  }, [anomaly?.id]);
+
   useEffect(() => {
     startClock();
     const onKey = (e: KeyboardEvent) => {
