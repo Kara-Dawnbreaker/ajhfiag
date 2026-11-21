@@ -47,6 +47,11 @@ export default function Ledger() {
       plan,
       arcadeRuns: runs,
       log,
+      progression: {
+        discoveries: localStorage.getItem("bm.v3.discoveries"),
+        selectedTheme: localStorage.getItem("bm.v3.theme"),
+        weeklyProgress: localStorage.getItem("bm.v3.week"),
+      },
     });
 
   return (
