@@ -144,7 +144,6 @@ export default function ProgressionHub() {
           <ul className="mt-3 space-y-3">
             {weeklyTasks.map((task) => {
               const value = weeklyProgress(task.key);
-              const done = value >= task.target;
               return <li key={task.id}>
                 <div className="flex justify-between gap-2 text-sm"><span>{task.label}</span><span className="font-mono text-xs text-ash">{Math.min(value, task.target)}/{task.target}</span></div>
                 <div className="mt-1 h-1 bg-bone/10"><div className="h-full bg-sky transition-all" style={{ width: `${meter(value, task.target)}%` }} /></div>
