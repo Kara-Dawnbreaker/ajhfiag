@@ -8,11 +8,12 @@ const STATIONS = [
   { id: "flow", name: "Flow Studio", href: "#flow", task: "make a paint burst", metric: "bursts" as const },
   { id: "beat", name: "Beat Machine", href: "#beat", task: "drop a beat", metric: "beats" as const },
   { id: "reflex", name: "Reflex Arcade", href: "#reflex", task: "play an arcade run", metric: "arcadeRuns" as const },
+  { id: "blink", name: "Blink", href: "#blink", task: "build a tap streak", metric: "blinkHits" as const },
   { id: "life", name: "Life Organ", href: "#life", task: "grow a living pattern", metric: "gens" as const },
 ];
 
 const DISCOVERIES = [
-  { id: "fourfold", name: "Fourfold Mind", hint: "Try every station at least once.", test: (s: Stats) => s.bursts > 0 && s.beats > 0 && s.arcadeRuns > 0 && s.gens > 0 },
+  { id: "fourfold", name: "Fourfold Mind", hint: "Try every station at least once.", test: (s: Stats) => s.bursts > 0 && s.beats > 0 && s.arcadeRuns > 0 && s.blinkHits > 0 && s.gens > 0 },
   { id: "curator", name: "Curator's Eye", hint: "Pin three creations in your museum.", test: (s: Stats) => s.pinned >= 3 },
   { id: "sound-and-life", name: "Living Sound", hint: "Make the Life Organ sing and build a beat.", test: (s: Stats) => s.notes >= 40 && s.beats >= 10 },
   { id: "long-haul", name: "Time Traveller", hint: "Spend 30 minutes exploring the Machine.", test: (s: Stats) => s.seconds >= 1800 },
@@ -28,7 +29,7 @@ function mondayKey() {
 }
 
 function totalXp(s: Stats) {
-  return s.events + s.bursts * 3 + s.beats * 2 + s.arcadeRuns * 8 + s.gens / 5 + s.pinned * 12 + s.notes / 10;
+  return s.events + s.bursts * 3 + s.beats * 2 + s.arcadeRuns * 8 + s.blinkHits * 2 + s.blinkRuns * 6 + s.gens / 5 + s.pinned * 12 + s.notes / 10;
 }
 
 function meter(value: number, target: number) {
@@ -52,6 +53,7 @@ export default function ProgressionHub() {
     { id: "week-flow", label: "Create 12 paint bursts", key: "bursts" as const, target: 12 },
     { id: "week-beat", label: "Drop 30 beats", key: "beats" as const, target: 30 },
     { id: "week-arcade", label: "Finish 5 arcade runs", key: "arcadeRuns" as const, target: 5 },
+    { id: "week-blink", label: "Land 60 taps in Blink", key: "blinkHits" as const, target: 60 },
     { id: "week-life", label: "Grow 250 generations", key: "gens" as const, target: 250 },
   ];
 
@@ -76,6 +78,7 @@ export default function ProgressionHub() {
     { name: "Flow", value: stats.bursts, target: 50 },
     { name: "Beat", value: stats.beats, target: 100 },
     { name: "Reflex", value: stats.arcadeBest, target: 500 },
+    { name: "Blink", value: stats.blinkBest, target: 50 },
     { name: "Life", value: stats.gens, target: 1000 },
   ], [stats]);
 
@@ -215,6 +218,8 @@ export default function ProgressionHub() {
               ["interactions", stats.events.toLocaleString()],
               ["creations pinned", gallery.length.toLocaleString()],
               ["best arcade score", stats.arcadeBest.toLocaleString()],
+              ["best Blink streak", stats.blinkBest.toLocaleString()],
+              ["Blink taps", stats.blinkHits.toLocaleString()],
               ["beats dropped", stats.beats.toLocaleString()],
               ["life generations", stats.gens.toLocaleString()],
               ["paint bursts", stats.bursts.toLocaleString()],
