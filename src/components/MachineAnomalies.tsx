@@ -80,7 +80,7 @@ export default function MachineAnomalies() {
             <div className="flex flex-wrap gap-2"><button type="button" onClick={amplify} className="btn">amplify +18s</button><button type="button" onClick={contain} className="btn border-coral/50 text-coral">contain signal</button></div>
           </div> : <p className="mb-4 font-mono text-[0.6rem] tracking-[0.14em] text-ash uppercase">No global effects running · scan to disturb the system</p>}
           <div className="flex flex-wrap gap-2">
-            {ANOMALIES.map((item) => <button key={item.id} type="button" onClick={() => setSelectedId(item.id)} aria-pressed={active?.id === item.id} className={`border px-2 py-1 font-mono text-[0.58rem] tracking-[0.12em] transition-colors ${active?.id === item.id ? "border-plum/70 bg-plum/15 text-plum" : "border-bone/10 text-ash hover:border-bone/30"}`}>{item.code} · {item.name}</button>)}
+            {ANOMALIES.map((item) => <button key={item.id} type="button" onClick={() => { setSelectedId(item.id); activateAnomaly(item.id); }} aria-pressed={active?.id === item.id} className={`border px-2 py-1 font-mono text-[0.58rem] tracking-[0.12em] transition-colors ${active?.id === item.id ? "border-plum/70 bg-plum/15 text-plum" : "border-bone/10 text-ash hover:border-bone/30"}`}>{item.code} · {item.name}</button>)}
           </div>
         </div>
       </div>
