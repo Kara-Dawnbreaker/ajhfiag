@@ -378,6 +378,7 @@ export function startClock() {
         daily,
         stats: { ...s.stats, seconds: s.stats.seconds + 5 },
         boredom: creep ? Math.min(100, s.boredom + 1) : s.boredom,
+        anomaly: s.anomaly && s.anomaly.expiresAt > Date.now() ? s.anomaly : null,
       };
     });
   }, 5000);
