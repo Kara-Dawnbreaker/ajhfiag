@@ -302,3 +302,26 @@ input[type="range"]::-moz-range-thumb {
 /* Accessible keyboard focus and disabled controls. */
 :focus-visible { outline: 2px solid var(--color-amber); outline-offset: 3px; }
 button:disabled { cursor: not-allowed; opacity: 0.45; }
+
+
+/* ---------- unlockable machine atmospheres ---------- */
+:root[data-machine-theme="ember"] {
+  --color-ink: #160d0b;
+  --color-ink-2: #21120e;
+  --color-ink-3: #2d1913;
+  --color-amber: #ff8a3d;
+  --color-coral: #ff4e36;
+  --color-mint: #ffd166;
+  --color-sky: #ffb18a;
+  --color-plum: #e87952;
+}
+:root[data-machine-theme="deep-sea"] {
+  --color-ink: #07131b;
+  --color-ink-2: #0c1c27;
+  --color-ink-3: #122b38;
+  --color-amber: #65d6d0;
+  --color-coral: #53a8d8;
+  --color-mint: #8be9d5;
+  --color-sky: #7bbcff;
+  --color-plum: #a7a1ff;
+}
