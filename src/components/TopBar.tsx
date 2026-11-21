@@ -6,11 +6,9 @@ import { isMuted, play, setMuted } from "../lib/audio";
 const NAV = [
   { id: "flow", label: "Flow", n: "01" },
   { id: "beat", label: "Beat", n: "02" },
-  { id: "gravity", label: "Gravity", n: "03" },
-  { id: "reflex", label: "Reflex", n: "04" },
-  { id: "oracle", label: "Oracle", n: "05" },
-  { id: "life", label: "Life", n: "06" },
-  { id: "ledger", label: "Ledger", n: "07" },
+  { id: "reflex", label: "Reflex", n: "03" },
+  { id: "life", label: "Life", n: "04" },
+  { id: "ledger", label: "Ledger", n: "05" },
 ];
 
 const COLORS = ["#ffb020", "#ff5f45", "#35e39f", "#58b6ff", "#b46bff", "#f4ece0"];
