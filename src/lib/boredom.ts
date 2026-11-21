@@ -301,6 +301,9 @@ function wipe() {
   try {
     localStorage.removeItem(CORE_KEY);
     localStorage.removeItem(GAL_KEY);
+    localStorage.removeItem("bm.v3.discoveries");
+    localStorage.removeItem("bm.v3.theme");
+    localStorage.removeItem("bm.v3.week");
   } catch {
     /* ignore */
   }
