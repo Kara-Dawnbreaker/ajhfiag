@@ -38,6 +38,12 @@ const QUIPS: Record<string, string[]> = {
   "LOADED PULSAR": ["Three-way symmetry. Show-off."],
   "LOADED GUN": ["Gliders incoming. Do not stand in the way."],
   POKED: ["Ow. Okay. That was fine.", "Hi, I'm PIP. I'm bored too.", "Boop."],
+  "ANOMALY CLOCK-SLIP": ["My clock just blinked. I am choosing not to panic.", "Time is doing that thing again."],
+  "ANOMALY ROUTE-GHOST": ["There is a door where no door should be.", "I did not add that route. Did you?"],
+  "ANOMALY PIP-ECHO": ["Wait. I heard myself answer before I spoke.", "There are two of me in the signal. Only one is supposed to be here."],
+  "ANOMALY COLOUR-LEAK": ["The palette is leaking into everything!", "I quite like this colour. I do not like where it came from."],
+  "ANOMALY SILENT-WAVE": ["The machine has gone quiet. I can still hear my own thoughts.", "Sound channel is missing. Visual channel is still alive."],
+  "ANOMALY CONTAINED": ["Signal contained. The machine can breathe again.", "Back to normal. Probably."],
 };
 
 const IDLE = [
@@ -91,7 +97,20 @@ export default function Companion() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ping]);
 
-  // PIP evolves as the whole machine gains experience.\n  useEffect(() => {\n    if (pipTier > tierRef.current) say(["", "PIP update! New sensors online.", "Look at me. I have evolved.", "Maximum PIP. I am basically the machine now."][pipTier], 4600);\n    tierRef.current = pipTier;\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [pipTier]);\n\n  // React when a hidden discovery is found.\n  useEffect(() => {\n    if (latestLog?.text.startsWith("discovery found")) say(`Secret discovered: ${latestLog.text.split("·").pop()?.trim()}. Nice work.`, 4600);\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [latestLog?.id]);\n\n  // Celebrate badges.
+  // PIP evolves as the whole machine gains experience.
+  useEffect(() => {
+    if (pipTier > tierRef.current) say(["", "PIP update! New sensors online.", "Look at me. I have evolved.", "Maximum PIP. I am basically the machine now."][pipTier], 4600);
+    tierRef.current = pipTier;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pipTier]);
+
+  // React when a hidden discovery is found.
+  useEffect(() => {
+    if (latestLog?.text.startsWith("discovery found")) say("Secret discovered: " + latestLog.text.split("·").pop()?.trim() + ". Nice work.", 4600);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [latestLog?.id]);
+
+  // Celebrate badges.
   useEffect(() => {
     if (!toast) return;
     say(`badge unlocked: ${toast.title.toLowerCase()} ${toast.glyph}`, 4200);
