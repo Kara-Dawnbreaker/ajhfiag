@@ -33,7 +33,7 @@ export default function Ledger() {
   const recent = log.slice(-14).reverse();
 
   const wipeAll = () => {
-    if (window.confirm("Wipe your whole record? Badges, gallery, plan and stats all go.")) wipe();
+    if (window.confirm("Wipe your whole record? Badges, gallery, discoveries, themes, plan and stats all go.")) { wipe(); window.location.reload(); }
   };
 
   const doExport = () =>
