@@ -328,7 +328,7 @@ export default function LifeOrgan() {
   return (
     <SectionShell
       id="life"
-      index="04"
+      index="05"
       kicker="cellular automaton · sweep sequencer"
       title="Life, but it sings."
       blurb="Conway's Game of Life wrapped around a sweeping playhead. Each column plays the living cells it passes: higher rows are higher notes, and every rule has its own instrument. Draw to seed it, pick a rule, and let the sweep play. One full sweep is one generation."
