@@ -330,13 +330,13 @@ export const useBoredom = () => actions;
 let clockStarted = false;
 let ticks = 0;
 
-/** Once a second: count visible time, roll the day over, and let boredom creep back when idle. */
+/** Every five seconds: count visible time, roll the day over, and let boredom creep back when idle. */
 export function startClock() {
   if (clockStarted || typeof window === "undefined") return;
   clockStarted = true;
   window.setInterval(() => {
     if (document.visibilityState !== "visible") return;
-    ticks++;
+    ticks += 5;
     commit((s) => {
       const today = todayKey();
       const daily = s.daily.date === today ? s.daily : emptyDaily(today);
@@ -345,9 +345,9 @@ export function startClock() {
       return {
         ...s,
         daily,
-        stats: { ...s.stats, seconds: s.stats.seconds + 1 },
+        stats: { ...s.stats, seconds: s.stats.seconds + 5 },
         boredom: creep ? Math.min(100, s.boredom + 1) : s.boredom,
       };
     });
-  }, 1000);
+  }, 5000);
 }
