@@ -59,7 +59,7 @@ export default function FlowStudio() {
   const { nudge, track, pinImage } = useBoredom();
   const { ref: wrapRef, inView } = useInView<HTMLDivElement>();
   const [palette, setPalette] = useState(0);
-  const [density, setDensity] = useState(850);
+  const [density, setDensity] = useState(650);
   const [speed, setSpeed] = useState(1);
   const [turbulence, setTurbulence] = useState(1);
   const [trail, setTrail] = useState(0.06);
@@ -228,7 +228,7 @@ export default function FlowStudio() {
       index="01"
       kicker="generative paint studio"
       title="Let mathematics do the brushwork."
-      blurb="Nine hundred particles are crawling through a Perlin noise field, each one dragging a thread of colour behind it. Move your cursor to stir the field, click to detonate a fresh swarm."
+      blurb="Hundreds of particles are crawling through a flowing noise field, each one dragging a thread of colour behind it. Move your cursor to stir the field, click to detonate a fresh swarm."
       accent="#ffb020"
       controls={
         <>
@@ -319,7 +319,7 @@ export default function FlowStudio() {
             label="particles"
             value={density}
             min={150}
-            max={2200}
+            max={1600}
             step={50}
             onChange={setDensity}
             onCommit={tune}
