@@ -71,6 +71,7 @@ export default function BeatMachine() {
   const [step, setStep] = useState(-1);
   const [muted, setMuted] = useState<boolean[]>([false, false, false, false, false]);
   const [preset, setPreset] = useState("house");
+  const [audioError, setAudioError] = useState(false);
 
   const engine = useRef<Engine | null>(null);
   const patternRef = useRef(pattern);
@@ -89,24 +90,34 @@ export default function BeatMachine() {
   bpmRef.current = bpm;
   swingRef.current = swing;
 
-  const ensureAudio = () => {
+  const ensureAudio = (): Engine | null => {
     if (engine.current) return engine.current;
-    const AC = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-    const ctx = new AC();
-    const master = ctx.createGain();
-    master.gain.value = volume;
-    const analyser = ctx.createAnalyser();
-    analyser.fftSize = 1024;
-    master.connect(analyser);
-    analyser.connect(ctx.destination);
+    const AC = window.AudioContext ?? (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AC) {
+      setAudioError(true);
+      return null;
+    }
+    try {
+      const ctx = new AC();
+      const master = ctx.createGain();
+      master.gain.value = volume;
+      const analyser = ctx.createAnalyser();
+      analyser.fftSize = 1024;
+      master.connect(analyser);
+      analyser.connect(ctx.destination);
 
-    const len = Math.floor(ctx.sampleRate * 0.6);
-    const noise = ctx.createBuffer(1, len, ctx.sampleRate);
-    const data = noise.getChannelData(0);
-    for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+      const len = Math.floor(ctx.sampleRate * 0.6);
+      const noise = ctx.createBuffer(1, len, ctx.sampleRate);
+      const data = noise.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
 
-    engine.current = { ctx, master, analyser, noise };
-    return engine.current;
+      engine.current = { ctx, master, analyser, noise };
+      setAudioError(false);
+      return engine.current;
+    } catch {
+      setAudioError(true);
+      return null;
+    }
   };
 
   useEffect(() => {
@@ -116,6 +127,7 @@ export default function BeatMachine() {
   const voice = (trackIdx: number, level: number, when: number) => {
     if (isMuted()) return;
     const eng = ensureAudio();
+    if (!eng) return;
     const { ctx, master, noise } = eng;
     const g = 0.35 + level * 0.3;
 
@@ -270,7 +282,8 @@ export default function BeatMachine() {
 
   const togglePlay = () => {
     const eng = ensureAudio();
-    void eng.ctx.resume();
+    if (!eng) return;
+    void eng.ctx.resume().catch(() => setAudioError(true));
     if (playing) {
       if (timer.current) window.clearInterval(timer.current);
       timer.current = null;
@@ -301,8 +314,10 @@ export default function BeatMachine() {
     });
     if (dir > 0) {
       const eng = ensureAudio();
-      void eng.ctx.resume();
-      voice(t, 1, eng.ctx.currentTime + 0.005);
+      if (eng) {
+        void eng.ctx.resume().catch(() => setAudioError(true));
+        voice(t, 1, eng.ctx.currentTime + 0.005);
+      }
       nudge(1, "SEQUENCED");
     }
   };
@@ -445,6 +460,7 @@ export default function BeatMachine() {
               <div key={t.id} className="mb-1 grid grid-cols-[74px_1fr] items-center gap-3">
                 <button
                   type="button"
+                  aria-pressed={muted[ti]}
                   onClick={() => {
                     setMuted((m) => m.map((v, i) => (i === ti ? !v : v)));
                     nudge(0.5, "MIXED");
@@ -512,6 +528,7 @@ export default function BeatMachine() {
           <span>click = level up</span>
           <span>shift+click = level down</span>
           <span>track name = mute</span>
+          {audioError ? <span role="status" className="w-full text-coral">Audio is unavailable in this browser. Try a recent browser with audio enabled.</span> : null}
           <span className="ml-auto flex items-center gap-2">
             <span className={cn("h-1.5 w-1.5 rounded-full", playing ? "bg-mint blink" : "bg-ash/40")} />
             {playing ? `playing · step ${(step + 1 + STEPS) % STEPS || 16}/16` : "stopped"}
