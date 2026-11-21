@@ -288,7 +288,7 @@ export default function LifeOrgan() {
       }
       const gen = genRef.current;
       setUi((u) => (u.gen === gen && u.pop === pop ? u : { gen, pop }));
-    }, 250);
+    }, 500);
     return () => window.clearInterval(id);
   }, [track]);
 
