@@ -11,6 +11,7 @@ export type LogItem = { id: number; t: number; text: string; tone: "info" | "goo
 export type Float = { id: number; label: string; amount: number };
 export type Toast = { id: number; title: string; sub: string; glyph: string; color: string };
 export type Ping = { id: number; label: string };
+export type MachineAnomaly = { id: string; startedAt: number; expiresAt: number };
 
 export type State = {
   boredom: number;
@@ -27,6 +28,7 @@ export type State = {
   toast: Toast | null;
   ping: Ping | null;
   lastNudge: number;
+  anomaly: MachineAnomaly | null;
 };
 
 const CORE_KEY = "bm.v2.core";
@@ -55,6 +57,7 @@ function freshState(): State {
     toast: null,
     ping: null,
     lastNudge: 0,
+    anomaly: null,
   };
 }
 
@@ -77,6 +80,7 @@ function load(): State {
     s.runs = core.runs ?? [];
     s.unlocked = (core.unlocked ?? []).filter((id) => BADGES.some((badge) => badge.id === id));
     s.dareDayRecorded = core.dareDayRecorded ?? null;
+    s.anomaly = core.anomaly && core.anomaly.expiresAt > Date.now() ? core.anomaly : null;
     if (core.daily && core.daily.date === todayKey()) s.daily = core.daily;
   } else {
     // Migrate the first prototype's keys so an existing player keeps their progress.
@@ -105,6 +109,7 @@ function persistCore() {
           log: state.log,
           runs: state.runs,
           unlocked: state.unlocked,
+          anomaly: state.anomaly,
         }),
       );
     } catch {
@@ -212,6 +217,27 @@ function nudge(amount: number, label = "") {
     }
     return next;
   });
+}
+
+function activateAnomaly(id: string, duration = 24000) {
+  const startedAt = Date.now();
+  commit((s) => ({
+    ...s,
+    anomaly: { id, startedAt, expiresAt: startedAt + duration },
+    ping: { id: nid(), label: `ANOMALY ${id.toUpperCase()}` },
+    log: pushLog(s.log, `global anomaly activated · ${id}`, "warn"),
+  }));
+  window.setTimeout(() => {
+    commit((s) => s.anomaly?.startedAt === startedAt
+      ? { ...s, anomaly: null, log: pushLog(s.log, `global anomaly contained · ${id}`, "good") }
+      : s);
+  }, duration);
+}
+
+function clearAnomaly() {
+  commit((s) => s.anomaly
+    ? { ...s, anomaly: null, log: pushLog(s.log, `global anomaly manually contained · ${s.anomaly.id}`, "good"), ping: { id: nid(), label: "ANOMALY CONTAINED" } }
+    : s);
 }
 
 function reset() {
@@ -324,6 +350,8 @@ export const actions = {
   clearPlan,
   pinImage,
   unpin,
+  activateAnomaly,
+  clearAnomaly,
   wipe,
 };
 
