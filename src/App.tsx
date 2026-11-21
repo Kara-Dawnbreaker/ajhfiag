@@ -5,9 +5,7 @@ import Hero from "./components/Hero";
 import FlowStudio from "./components/FlowStudio";
 import BeatMachine from "./components/BeatMachine";
 import Interlude from "./components/Interlude";
-import GravitySandbox from "./components/GravitySandbox";
 import ReflexArcade from "./components/ReflexArcade";
-import Oracle from "./components/Oracle";
 import LifeOrgan from "./components/LifeOrgan";
 import Ledger from "./components/Ledger";
 import Footer from "./components/Footer";
@@ -16,11 +14,9 @@ import Companion from "./components/Companion";
 const JUMP: Record<string, string> = {
   "1": "flow",
   "2": "beat",
-  "3": "gravity",
-  "4": "reflex",
-  "5": "oracle",
-  "6": "life",
-  "7": "ledger",
+  "3": "reflex",
+  "4": "life",
+  "5": "ledger",
 };
 
 export default function App() {
@@ -48,9 +44,7 @@ export default function App() {
           <FlowStudio />
           <BeatMachine />
           <Interlude />
-          <GravitySandbox />
           <ReflexArcade />
-          <Oracle />
           <LifeOrgan />
           <Ledger />
         </main>
