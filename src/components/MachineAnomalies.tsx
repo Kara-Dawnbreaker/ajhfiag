@@ -34,14 +34,14 @@ export default function MachineAnomalies() {
     setScans((value) => value + 1);
     unlockAudio();
     play("click", 900, { vol: 0.18 });
-    activateAnomaly(next.id);
     nudge(1, "ANOMALY ACTIVATED");
+    activateAnomaly(next.id);
   };
 
   const amplify = () => {
     if (!globalActive) return;
-    activateAnomaly(globalActive.id, 42000);
     nudge(0.5, "ANOMALY AMPLIFIED");
+    activateAnomaly(globalActive.id, 42000);
   };
 
   const contain = () => {
