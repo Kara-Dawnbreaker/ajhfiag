@@ -22,6 +22,11 @@ export default function MachineAnomalies() {
   const remaining = anomaly ? Math.max(0, Math.ceil((anomaly.expiresAt - now) / 1000)) : 0;
 
   useEffect(() => {
+    const restored = ANOMALIES.find((item) => item.id === anomaly?.id);
+    if (restored) setSelectedId(restored.id);
+  }, [anomaly?.id]);
+
+  useEffect(() => {
     if (!anomaly) return;
     const timer = window.setInterval(() => setNow(Date.now()), 250);
     return () => window.clearInterval(timer);
