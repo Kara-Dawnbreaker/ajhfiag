@@ -1,4 +1,5 @@
 import SectionShell from "./SectionShell";
+import ProgressionHub from "./ProgressionHub";
 import { useBoredom, useStore } from "../lib/boredom";
 import { BADGES, dareProgress, formatDuration, pickDares } from "../lib/game";
 import { cn } from "../utils/cn";
@@ -67,6 +68,7 @@ export default function Ledger() {
         </>
       }
     >
+      <ProgressionHub />
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1.1fr_1fr]">
         {/* Daily dares */}
         <div className="panel relative overflow-hidden p-5">
