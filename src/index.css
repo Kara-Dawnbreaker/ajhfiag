@@ -298,3 +298,7 @@ input[type="range"]::-moz-range-thumb {
   .stamp-in { animation: none !important; opacity: 1; }
   .reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* Accessible keyboard focus and disabled controls. */
+:focus-visible { outline: 2px solid var(--color-amber); outline-offset: 3px; }
+button:disabled { cursor: not-allowed; opacity: 0.45; }
